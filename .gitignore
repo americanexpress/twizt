@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-error.log
+.DS_Store
+
+# Dependency directory
+node_modules
+coverage
+.nyc_output
+
+# output dir
+dist
+.vscode

@@ -1,0 +1,250 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>twizt</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">twizt</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> twizt</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#twizt-a-high-level-masked-authentication-based-messaging-framework" id="twizt-a-high-level-masked-authentication-based-messaging-framework" style="color: inherit; text-decoration: none;">
+					<h1>Twizt: A high-level Masked Authentication-based Messaging framework</h1>
+				</a>
+				<p>This mini-framework, based on the MAM Client JS Library, makes it possible to publish transactions to the Tangle that contain only messages, with no value. It hides all IOTA-related paradigms, thus making it as easy as possible for anyone to write to or read from the tangle. Additionally, it caches responses. For example, if data from a particular root has been fetched once, the second time it will not invoke the provider API to fetch it. </p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code class="language-sh"><span class="hljs-comment"># install</span>
+git <span class="hljs-built_in">clone</span> &lt;repo-url&gt;
+<span class="hljs-built_in">cd</span> twizt
+yarn install
+
+<span class="hljs-comment"># full test suite</span>
+yarn <span class="hljs-built_in">test</span></code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>First, one needs to decide whether to connect to a remote public node, or run a local IRI. In case of latter,
+				do the following:</p>
+				<pre><code class="language-sh">docker pull iotaledger/iri:latest
+docker run --name iri iotaledger/iri:latest --remote <span class="hljs-literal">true</span> -p 14265</code></pre>
+				<p>Example use to publish to Tangle and fetch from it respectively, follow the example use in
+				the <a href="./test/index.spec.js">Test script</a> file.</p>
+				<ol>
+					<li>Sender does the following:</li>
+				</ol>
+				<pre><code class="language-javascript"><span class="hljs-comment">/// iota node address. For example, if you have installed a local IRI node:</span>
+<span class="hljs-keyword">const</span> PROVIDER = <span class="hljs-string">'http://localhost:14265'</span>;
+
+<span class="hljs-comment">// alternately, you can connect to one of the public nodes on either testnet or mainnet</span>
+<span class="hljs-comment">// create MamProvider object. Publisher shall not use same seed across sessions, </span>
+<span class="hljs-comment">// but rather let the framework generate one each time</span>
+<span class="hljs-comment">// option exists to provide own seed</span>
+
+interface Fruit {
+    <span class="hljs-attr">name</span>: string;
+};
+
+<span class="hljs-keyword">const</span> publisherMam = <span class="hljs-keyword">new</span> MamProvider&lt;Fruit&gt;(PROVIDER);
+
+<span class="hljs-comment">// publish to tangle any arbitrary JSON object. for example. </span>
+<span class="hljs-comment">// Optionally, one can use symmentric encryption to "hide" the message from public (see docs)</span>
+
+<span class="hljs-keyword">const</span> root = <span class="hljs-keyword">await</span> publisherMam.publish({ <span class="hljs-attr">fruit</span>: <span class="hljs-string">'MELLON'</span> }); 
+
+<span class="hljs-comment">// above method returns root address. </span>
+<span class="hljs-comment">// For example: `CGBMNLLPXNUSSGZBGHTHCOLQTKJKFVKNWQUBLWKCMNPLSREMMFZDVYISXOBYOUPQ9JR9GMBJXGIAG99SG`</span></code></pre>
+				<ol start="2">
+					<li><p>Sender communicates <code>root</code> string to reader. If message is encrypted, encryption key (a.k.a. side key)
+						also communicated.</p>
+					</li>
+					<li><p>Reader runs the code below:</p>
+					</li>
+				</ol>
+				<pre><code class="language-javascript"><span class="hljs-comment">// the seed of the reader. For example:</span>
+<span class="hljs-keyword">const</span> readerMam = <span class="hljs-keyword">new</span> MamProvider&lt;Fruit&gt;(PROVIDER);
+
+<span class="hljs-comment">// fetch from tangle</span>
+<span class="hljs-comment">// returns next root, while printing messages. Side key also passed, if message encrypted.</span>
+
+<span class="hljs-keyword">const</span> resp = <span class="hljs-keyword">await</span> readerMam.fetch(root); 
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'nextRoot:'</span>, resp.nextRoot, <span class="hljs-string">' messages:'</span>, resp.messages);</code></pre>
+				<p>In fact, you can fetch a specific message we placed on to the &quot;live&quot; tangle, by running the below.</p>
+				<pre><code class="language-javascript"><span class="hljs-keyword">const</span> resp = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> MamProvider&lt;any&gt;(<span class="hljs-string">'&lt;live net url&gt;'</span>)
+    .fetch(<span class="hljs-string">'KGEQBBXN9HDOBYHGTQ9CZUBJRSTQL9TGGERDJC9NPKT9KKCKG9ZYDCGK9XICF9HNEUXIJRBYOJC9NISCZ'</span>);</code></pre>
+				<a href="#building" id="building" style="color: inherit; text-decoration: none;">
+					<h2>Building</h2>
+				</a>
+				<p>Run <code>yarn build</code> .</p>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>We welcome Your interest in the American Express Open Source Community on Github. Any Contributor to any Open Source
+					Project managed by the American Express Open Source Community must accept and sign an Agreement indicating agreement to
+					the terms below. Except for the rights granted in this Agreement to American Express and to recipients of software
+					distributed by American Express, You reserve all right, title, and interest, if any, in and to Your Contributions.
+				Please <a href="https://cla-assistant.io/americanexpress/twizt">fill out the Agreement</a>.</p>
+				<p>Please feel free to open pull requests and see <code>CONTRIBUTING.md</code> for commit formatting details.</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>Any contributions made under this project will be governed by the <a href="LICENSE">Apache License 2.0</a>.</p>
+				<a href="#code-of-conduct" id="code-of-conduct" style="color: inherit; text-decoration: none;">
+					<h2>Code of Conduct</h2>
+				</a>
+				<p>This project adheres to the <a href="CODE_OF_CONDUCT.md">American Express Community Guidelines</a>.
+				By participating, you are expected to honor these guidelines.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_mamprovider_.html">&quot;<wbr>Mam<wbr>Provider&quot;</a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_utils_.html">&quot;utils&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

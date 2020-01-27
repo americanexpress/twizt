@@ -1,0 +1,87 @@
+{
+    "name": "twizt",
+    "version": "1.0.0",
+    "description": "IOTA MAM high-level framework",
+    "main": "dist/",
+    "scripts": {
+      "prepare": "npm run build",
+        "postInstall": "tsc -p . --declaration",
+        "start:e2e": "docker rm iri && docker run -p 14265:14265 -p 15600:15600 --name iri iotaledger/iri:latest --remote true -p 14265",
+        "lint": "eslint ./ --ignore-path .eslintignore --ext .js",
+        "test": "./node_modules/.bin/nyc mocha src/test/unit/*.spec.ts --require ts-node/register --timeout 999999",
+        "int": "./node_modules/.bin/nyc mocha src/test/integration/*.spec.ts --require ts-node/register --timeout 999999",
+        "doc": "./node_modules/.bin/typedoc --out docs src/main/MamProvider.ts",
+        "build": "tsc -p . --declaration"
+    },
+    "keywords": [
+        "iota",
+        "balance",
+        "amex",
+        "blockchain"
+    ],
+    "contributors": [
+        "Andras L Ferenczi",
+        "Chandrakanth Mamillapalli"
+    ],
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@types/iota.lib.js": "^0.4.0",
+        "@types/mocha": "^5.2.7",
+        "add": "^2.0.6",
+        "array-union": "^1.0.2",
+        "babel-polyfill": "^6.26.0",
+        "body-parser": "^1.18.3",
+        "fs": "^0.0.1-security",
+        "iota.lib.js": "^0.5.2",
+        "mam.client.js": "https://github.com/iotaledger/mam.client.js.git",
+        "secure-iota-seed-generator": "^1.0.1"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.2.3",
+        "@babel/core": "^7.2.2",
+        "@babel/node": "^7.2.2",
+        "@babel/preset-env": "^7.2.3",
+        "@babel/register": "^7.0.0",
+        "@commitlint/cli": "^7.5.2",
+        "@commitlint/config-conventional": "^7.5.0",
+        "@types/body-parser": "^1.16.8",
+        "@types/bytebuffer": "5.0.40",
+        "@types/chai": "^4.1.7",
+        "@types/chai-as-promised": "^7.1.0",
+        "babel-polyfill": "^6.26.0",
+        "chai": "^4.2.0",
+        "chai-as-promised": "^7.1.1",
+        "chai-files": "^1.4.0",
+        "mocha": "^6.2.2",
+        "nyc": "^14.1.1",
+        "source-map-support": "^0.5.10",
+        "ts-node": "^6.2.0",
+        "tsconfig-paths": "^3.6.0",
+        "tslint": "^5.20.0",
+        "typedoc": "^0.15.2",
+        "typescript": "^3.5.1"
+    },
+    "nyc": {
+        "extension": [
+            ".ts"
+        ],
+        "reporter": [
+            "text",
+            "cobertura",
+            "html",
+            "lcov"
+        ],
+        "exclude": [
+            "docs",
+            "coverage",
+            "src/test",
+            "dist"
+        ],
+        "per-file": true,
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100,
+        "check-coverage": true
+    }
+}
