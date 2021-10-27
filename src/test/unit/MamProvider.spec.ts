@@ -12,7 +12,7 @@
  * the License.
  */
 
-import {MamProvider, NextRootAndMessages} from '../../main';
+ import {MamProvider, NextRootAndMessages} from '../../main';
 
 import { expect } from 'chai';
 import sinon from 'sinon';

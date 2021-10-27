@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Copyright 2019 American Express Travel Related Services Company, Inc.
  *
@@ -11,16 +12,28 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
-import {MamProvider, NextRootAndMessages} from '../../main';
-import { expect } from 'chai';
-
-describe('fetch an existing message', () => {
-    it('should fetch an older message from a known address', async () => { 
-        // need to connect to Mainnet
-        const provider = new MamProvider<any>('https://nodes.devnet.iota.org:443')
-        const resp = await provider.fetch('KGEQBBXN9HDOBYHGTQ9CZUBJRSTQL9TGGERDJC9NPKT9KKCKG9ZYDCGK9XICF9HNEUXIJRBYOJC9NISCZ');
-        expect(resp.messages.length).to.eq(4);
-        console.log('Fetch old message returns:', resp.messages);
-    });   
-});
+Object.defineProperty(exports, "__esModule", { value: true });
+const keyGen = require('secure-iota-seed-generator');
+/**
+ * generates single IOTA key
+ */
+function generateKey() {
+    return keyGen.generateSeed();
+}
+exports.generateKey = generateKey;
+/**
+ * Generate array `count` keys of `length` size each
+ *
+ * @param count - number of keys
+ * @param length - size of array
+ */
+async function arrayKeyGen(count) {
+    let keys = [];
+    let i;
+    for (i = 0; i < count; i++) {
+        keys.push(generateKey());
+    }
+    return keys;
+}
+exports.arrayKeyGen = arrayKeyGen;
+//# sourceMappingURL=utils.js.map

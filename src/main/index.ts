@@ -13,4 +13,7 @@
  */
 
 export {MamProvider, NextRootAndMessages} from './MamProvider'
+export {Graph} from './Graph';
+export {Vertex} from './Vertex';
+
 

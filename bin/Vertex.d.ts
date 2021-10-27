@@ -11,16 +11,22 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
-import {MamProvider, NextRootAndMessages} from '../../main';
-import { expect } from 'chai';
-
-describe('fetch an existing message', () => {
-    it('should fetch an older message from a known address', async () => { 
-        // need to connect to Mainnet
-        const provider = new MamProvider<any>('https://nodes.devnet.iota.org:443')
-        const resp = await provider.fetch('KGEQBBXN9HDOBYHGTQ9CZUBJRSTQL9TGGERDJC9NPKT9KKCKG9ZYDCGK9XICF9HNEUXIJRBYOJC9NISCZ');
-        expect(resp.messages.length).to.eq(4);
-        console.log('Fetch old message returns:', resp.messages);
-    });   
-});
+/**
+ * A vertex of the Graph
+ *
+ * @export
+ * @class Vertex
+ * @template I
+ * @template T
+ */
+export declare class Vertex<I, T> {
+    index: I;
+    data: T;
+    /**
+     * Creates an instance of Vertex.
+     * @param {I} index
+     * @param {T} data
+     * @memberof Vertex
+     */
+    constructor(index: I, data: T);
+}

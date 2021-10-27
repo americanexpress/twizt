@@ -5,12 +5,12 @@
       "target": "es2017",
       "noImplicitAny": true,
       "moduleResolution": "node",
-      "sourceMap": false,
-      "outDir": "dist",
+      "sourceMap": true,
+      "outDir": "bin",
       "lib": ["es2017"],
       "baseUrl": ".",
       "typeRoots": ["./node_modules/@types"]
     },
-    "exclude": ["node_modules", "src/test", "docs", "dist"]
+    "exclude": ["node_modules", "src/test", "docs", "bin"]
   }
   

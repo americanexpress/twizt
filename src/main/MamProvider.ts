@@ -12,7 +12,7 @@
  * the License.
  */
 
- // @ts-check
+// @ts-check
 
 const Mam = require('mam.client.js');
 import IOTA from 'iota.lib.js';
@@ -55,13 +55,13 @@ export class MamProvider<T> {
    * 3 security models (1..3)
    * @param {number} depth [4] - the starting point for the random walk. the higher the value, the farther 
    * back in the tangle the RW will start. and the longer runtime of the RW. 
-   * @param {number} mwm [14] - Min Weight Magnitude (MWM) - the amount of Work that will be carried out 
+   * @param {number} mwm [9] - Min Weight Magnitude (MWM) - the amount of Work that will be carried out 
    * in the PoW stage. 
    * @param {any} nextRoot - Next root (optional)
    */
 
-  constructor(provider: string, seed = utils.generateKey(), security = 2, 
-      depth = 4, mwm = 14, nextRoot:string = null) {
+  constructor(provider: string, seed: string = utils.generateKey(), security: number = 2,
+    depth: number = 4, mwm: number = 9, nextRoot: string = null) {
 
     this.iota = new IOTA({ provider: provider });
     this.depth = depth;
@@ -77,7 +77,7 @@ export class MamProvider<T> {
    *  @returns {string} - The current seed.
    */
 
-  public getSeed() : string {
+  public getSeed(): string {
     return this.mamState.seed;
   }
 
@@ -87,7 +87,7 @@ export class MamProvider<T> {
     *  @returns {array} - array of seeds
     */
 
-  public async generateSeeds(count: number) : Promise<string[]> {
+  public async generateSeeds(count: number): Promise<string[]> {
     return await utils.arrayKeyGen(count);
   }
 
@@ -98,12 +98,12 @@ export class MamProvider<T> {
    *  @returns {array} - array of side keys
    */
 
-  public async generateSideKeys(count: number) : Promise<string[]> {
+  public async generateSideKeys(count: number): Promise<string[]> {
     return await utils.arrayKeyGen(count);
   }
 
-  private isNullOrUndefined(param: any) : boolean {
-    if(param === null || param === undefined) {
+  private isNullOrUndefined(param: any): boolean {
+    if (param === null || param === undefined) {
       return true;
     }
 
@@ -125,7 +125,18 @@ export class MamProvider<T> {
       Mam.changeMode(this.mamState, RESTRICTED, sideKey);
     }
 
-    const trytes = this.iota.utils.toTrytes(JSON.stringify(packet));
+    const trytes = this.iota.utils.toTrytes(
+      JSON.stringify(packet, (key, value) => {
+        if (value instanceof Map) {
+          return {
+            dataType: 'Map',
+            value: Array.from(value.entries()), // or with spread: value: [...value]
+          };
+        } else {
+          return value;
+        }
+      })
+    );
     const message = Mam.create(this.mamState, trytes);
     this.mamState = message.state;
     console.log('state after creating message:', this.mamState);
@@ -144,8 +155,8 @@ export class MamProvider<T> {
    *  @returns {promise} - resolves to the next root in the linked chain
    */
 
-  private async _fetch(root: string, sideKey: string, callback: Callback<T>) : Promise<string> {
-    var dataArray:Array<T> = [];
+  private async _fetch(root: string, sideKey: string, callback: Callback<T>): Promise<string> {
+    var dataArray: Array<T> = [];
 
     if (this.cache.has(root)) {
       var cached = this.cache.get(root);
@@ -155,7 +166,16 @@ export class MamProvider<T> {
       return cached.nextRoot;
     }
     const getTrytes = (data: T) => {
-      const parsedDataFromTrytes = JSON.parse(this.iota.utils.fromTrytes(data.toString()));
+      const parsedDataFromTrytes = JSON.parse(
+        this.iota.utils.fromTrytes(data.toString()), (key, value) => {
+          if (typeof value === 'object' && value !== null) {
+            if (value.dataType === 'Map') {
+              return new Map(value.value);
+            }
+          }
+          return value;
+        }
+      );
       dataArray.push(parsedDataFromTrytes);
       callback(parsedDataFromTrytes);
     }
@@ -163,13 +183,13 @@ export class MamProvider<T> {
     const mode = this.isNullOrUndefined(sideKey) ? PUBLIC : RESTRICTED;
 
     const resp = await Mam.fetch(root, mode, sideKey, getTrytes);
-    if(resp !== null && resp.message !== undefined) {
+    if (resp !== null && resp.message !== undefined) {
       throw Error(resp.message);
     }
 
     this.cache.set(root, Object.assign({ data: dataArray }, resp));
 
-    return this.isNullOrUndefined(resp) ?  null : resp.nextRoot;
+    return this.isNullOrUndefined(resp) ? null : resp.nextRoot;
   }
 
   /**
@@ -186,7 +206,7 @@ export class MamProvider<T> {
    */
 
   async fetch(root: string, sideKey: string = null): Promise<NextRootAndMessages<T>> {
-    const messages:Array<any> = [];
+    const messages: Array<any> = [];
 
     const nextRoot = await this._fetch(root, sideKey, (record) => {
       messages.push(record);

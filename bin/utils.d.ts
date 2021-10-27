@@ -11,16 +11,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-
-import {MamProvider, NextRootAndMessages} from '../../main';
-import { expect } from 'chai';
-
-describe('fetch an existing message', () => {
-    it('should fetch an older message from a known address', async () => { 
-        // need to connect to Mainnet
-        const provider = new MamProvider<any>('https://nodes.devnet.iota.org:443')
-        const resp = await provider.fetch('KGEQBBXN9HDOBYHGTQ9CZUBJRSTQL9TGGERDJC9NPKT9KKCKG9ZYDCGK9XICF9HNEUXIJRBYOJC9NISCZ');
-        expect(resp.messages.length).to.eq(4);
-        console.log('Fetch old message returns:', resp.messages);
-    });   
-});
+/**
+ * generates single IOTA key
+ */
+export declare function generateKey(): string;
+/**
+ * Generate array `count` keys of `length` size each
+ *
+ * @param count - number of keys
+ * @param length - size of array
+ */
+export declare function arrayKeyGen(count: number): Promise<Array<string>>;

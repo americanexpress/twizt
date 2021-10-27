@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2019 American Express Travel Related Services Company, Inc.
  *
@@ -12,15 +13,32 @@
  * the License.
  */
 
-import {MamProvider, NextRootAndMessages} from '../../main';
-import { expect } from 'chai';
+export enum Status {
+  NEW,
+  VISITED,
+  COMPLETED
+}
 
-describe('fetch an existing message', () => {
-    it('should fetch an older message from a known address', async () => { 
-        // need to connect to Mainnet
-        const provider = new MamProvider<any>('https://nodes.devnet.iota.org:443')
-        const resp = await provider.fetch('KGEQBBXN9HDOBYHGTQ9CZUBJRSTQL9TGGERDJC9NPKT9KKCKG9ZYDCGK9XICF9HNEUXIJRBYOJC9NISCZ');
-        expect(resp.messages.length).to.eq(4);
-        console.log('Fetch old message returns:', resp.messages);
-    });   
-});
+/**
+ * Vertices defined here
+ *
+ * @export
+ * @class Vertex
+ * @template I
+ * @template T
+ */
+export class Vertex<T> {
+  data: T;
+  parent: Vertex<T>;
+  discoveryTime = 0;
+  finishTime = 0;
+  status = Status.NEW;
+  /**
+   * Creates an instance of Vertex.
+   * @param {T} data
+   * @memberof Vertex
+   */
+  constructor(data: T) {
+    this.data = data;
+  }
+}
